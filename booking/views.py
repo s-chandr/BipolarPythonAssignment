@@ -14,10 +14,11 @@ flights_collection = mongo['flights_collection']
 class Register_Booking(Resource):
     def get(self):
         try:
-            user_id = request.args.get("user_id", None)
-            if user_id is None:
-                return {"message": "user_id not found"}, 404
-            user_bookings = list(bookings_collection.find({"user_id": user_id },{"_id":0}))
+            email = request.args.get("email", None)
+            if email is None:
+                user_bookings = list(bookings_collection.find({},{"_id":0}))
+            else :    
+                user_bookings = list(bookings_collection.find({"email": email },{"_id":0}))
             return make_response(jsonify({"data":user_bookings}), 200)
         except Exception as e:
             return make_response(
@@ -33,9 +34,9 @@ class Register_Booking(Resource):
     
     def post(self):
         try:
-            user_id = request.args.get("user_id", None)
-            if user_id is None:
-                return {"message": "user_id not found"}, 404
+            email = request.args.get("email", None)
+            if email is None:
+                return {"message": "email not found"}, 404
             flight_number = request.args.get("flight_number", None)
             if flight_number is None:
                 return {"message": "flight_number not found"}, 404
@@ -75,7 +76,7 @@ class Register_Booking(Resource):
                 500,
             )
             booking = {
-                'user_id': user_id,
+                'email': email,
                 'flight_number': flight_number,
                 'booking_time': dt.now()
             }

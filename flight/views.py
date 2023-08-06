@@ -25,12 +25,12 @@ class Register_Flight(Resource):
     
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('admin_id', type=str, required=True, help='admin_id  is required.')
+        parser.add_argument('email', type=str, required=True, help='email  is required.')
         parser.add_argument('departure_time', type=lambda x: datetime.strptime(x, "%Y-%m-%dT%H:%M:%S"), required=True, help='Flight departure time is required.')
         args = parser.parse_args()
         seats = 60
         flight = {
-                'admin_id': args['admin_id'],
+                'email': args['email'],
                 'flight_number': str(uuid.uuid4().hex)[:10] + str(round(time.time())), #Random Flight Number
                 'departure_time': str(args['departure_time']),
                 'seats' : seats
